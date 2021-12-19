@@ -1,6 +1,6 @@
 # Pluralsight DDD Fundamentals Sample
 
-Sample code for the Pluralsight DDD Fundamentals course (coming soon) by Julie Lerman and Steve "ardalis" Smith. If you are looking for the .NET Framework sample from [the original 2014 DDD Fundamentals course](https://app.pluralsight.com/library/courses/domain-driven-design-fundamentals), it's available as the [ddd-vet-clinic sample](https://github.com/ardalis/ddd-vet-sample).
+Sample code for the [Pluralsight DDD Fundamentals course (2nd edition) by Julie Lerman and Steve "ardalis" Smith](https://www.pluralsight.com/courses/fundamentals-domain-driven-design). If you are looking for the .NET Framework sample from [the original 2014 DDD Fundamentals course](https://app.pluralsight.com/library/courses/domain-driven-design-fundamentals), it's available as the [ddd-vet-clinic sample](https://github.com/ardalis/ddd-vet-sample).
 
 ## Give a Star! :star:
 
@@ -12,7 +12,7 @@ If you like or are using this project to learn, please give it a star. Thanks!
 
 &nbsp;&nbsp;[1.1 Docker](#11-docker)
 
-&nbsp;&nbsp;[1.2 Visual Studio](#12-visual-studio)
+&nbsp;&nbsp;[1.2 Visual Studio and VS Code](#12-visual-studio-and-vs-code)
 
 [2. Student Recommendations](#2-student-recommendations)
 
@@ -83,6 +83,12 @@ Note that any data changes you make will not be persisted if you **docker remove
 
 ### 1.2 Visual Studio and VS Code
 
+You may need to configure a local NuGet server and put this package in it:
+
+```
+/FrontDesk/src/FrontDesk.Blazor/deps/Pluralsight.DDD.Deps/Pluralsight.DDD.Deps.1.0.0.nupkg
+```
+
 Running the sample from Visual Studio (or VS Code or Rider, etc) requires some additional setup. You will need to run multiple solutions side by side. You will also need to run RabbitMQ and PaperCut, ideally as a docker images. You can run RabbitMQ from Docker using this command:
 
 ```powershell
@@ -119,10 +125,62 @@ Don't worry about submitting a pull request for any `TODO` comments you fix. The
 
 ## 3. Architecture Notes
 
+The reference application is built as a small set of related monolithic ASP.NET Core applications. The two Blazor applications are built using a modified version of the [CleanArchitecture solution template](https://github.com/ardalis/CleanArchitecture) and also bears a great deal of similiarity to the [eShopOnWeb application](https://github.com/dotnet-architecture/eShopOnWeb) (also maintained by @ardalis). To learn more about migrating toward a domain-centric architecture from a data-centric one, check out [Steve's two courses on N-Tier architecture on Pluralsight](https://www.pluralsight.com/authors/steve-smith). You'll also find [videos covering Clean Architecture on Steve's YouTube channel](https://www.youtube.com/c/Ardalis/search?query=clean) as well as on the [eShopOnWeb home page](https://www.youtube.com/watch?v=vRZ8ucGac8M&ab_channel=Ardalis).
+
+If you or your team need help with architecting your .NET application following principles of clean architecture, with or without microservices, [Steve and his team and NimblePros](https://nimblepros.com) have a great deal of experience helping clients do just that. Get in touch.
+
 ## 4. Developer Notes
+
+If you're new to this kind of application development, and you have a Pluralsight subscription, I strongly advise you to learn about [SOLID principles](https://www.pluralsight.com/courses/csharp-solid-principles) and various [code smells and refactoring techniques](https://www.pluralsight.com/courses/refactoring-csharp-developers). You'll find the background in these principles informs most of the design decisions used in the individual classes and projects used in the sample code provided here. If you're really serious about learning these topics, watch the original versions of these courses, which were able to go into more depth (more recent courses need to be shorter since Pluralsight found too many students didn't complete longer courses. But not *you* - you have what it takes to finish the whole thing. Right?). They're available from [Steve's author page on Pluralsight](https://www.pluralsight.com/authors/steve-smith).
+
+The sample doesn't include exhaustive test coverage, but does demonstrate some automated tests. If testing is new to you, [Julie has a great course on automated testing](https://www.pluralsight.com/courses/automated-testing-fraidy-cats) that you should check out.
+
+### 4.1 Referenced NuGet Packages
+
+This course uses several NuGet packages that you may find useful.
+
+[Ardalis.ApiEndpoints](https://www.nuget.org/packages/Ardalis.ApiEndpoints/)
+A simple base class that lets you keep your API endpoints small and focused on one endpoint at a time. MVC is replaced with Request-EndPoint-Response (REPR).
+
+[Ardalis.GuardClauses](https://www.nuget.org/packages/Ardalis.GuardClauses/)
+Contains common guard clauses so you can use them consistently. Also can be easily extended to apply your own guards for custom/domain exception cases.
+
+[Ardalis.Specification](https://www.nuget.org/packages/Ardalis.Specification/)
+An implementation of the Specification design pattern that is well-suited to work with ORMs like Entity Framework (Core).
+
+[Ardalis.Specification.EntityFrameworkCore](https://www.nuget.org/packages/Ardalis.Specification.EntityFrameworkCore/)
+Adds EF Core-specific functionality, including a default implementation of a generic EF repository that supports Specifications.
+
+[Ardalis.Result](https://www.nuget.org/packages/Ardalis.Result/)
+Provides a generic result type that can be returned from application services. Can easily be translated into HTTP status codes or ActionResult types.
+
+[Ardalis.HttpClientTestExtensions](https://www.nuget.org/packages/Ardalis.HttpClientTestExtensions/)
+Removes boilerplate code from ASP.NET Core API integration/functional tests.
+
+[Autofac](https://www.nuget.org/packages/Autofac/)
+Powerful open source DI/IOC container for .NET that supports more features than built-in ServiceCollection.
+
+[Blazored.LocalStorage](https://www.nuget.org/packages/Blazored.LocalStorage/)
+Blazor utility for accessing browser local storage in Blazor WebAssembly apps.
+
+[MediatR](https://www.nuget.org/packages/MediatR/)
+Used to implement mediator pattern for commands and events.
+
+[Pluralsight.DDD.Deps](https://github.com/ardalis/pluralsight-ddd-fundamentals/tree/main/FrontDesk/src/FrontDesk.Blazor/deps)
+Includes required trial binaries from Telerik. Currently this includes both Kendo UI and Blazor controls; Kendo should be replaced with just Blazor later in 2021. To build locally you may need to place this package in a [local nuget repository](https://docs.microsoft.com/en-us/nuget/hosting-packages/local-feeds). This package and its contents are subject to Telerik's EULA located in the same folder.
+
+[PluralsightDdd.SharedKernel](https://www.nuget.org/packages/PluralsightDdd.SharedKernel/)
+An example SharedKernel package used by this sample built just for this course.
+
+[RabbitMQ.Client](https://www.nuget.org/packages/RabbitMQ.Client/)
+Client for communicating with RabbitMQ.
 
 ## 5. Credits
 
-This sample is from [Julie Lerman](https://www.pluralsight.com/authors/julie-lerman) and [Steve Smith](https://www.pluralsight.com/authors/steve-smith)'s Pluralsight course. The original sample was written for .NET Framework by Steve. The current .NET 5 version was initially ported with the help of [Shady Nagy](https://twitter.com/ShadyNagy_). Progress Software provided the [Blazor Scheduler control](https://www.telerik.com/blazor-ui/scheduler) used to display the clinic's schedule. Additional credits include:
+This sample is from [Julie Lerman](https://www.pluralsight.com/authors/julie-lerman) and [Steve Smith](https://www.pluralsight.com/authors/steve-smith)'s Pluralsight course. The original sample was written for .NET Framework by Steve. The current .NET 5 version was initially ported with the help of [Shady Nagy](https://twitter.com/ShadyNagy_). Progress Software provided the [Blazor Scheduler control](https://www.telerik.com/blazor-ui/scheduler) used to display the clinic's schedule*.
+
+\* *Initial version is using a Kendo schedule since certain features weren't available at recording time*
+
+Additional credits include:
 
 - Your name could be here...
