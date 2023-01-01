@@ -1,3 +1,4 @@
+version: "2"
 services:
   # https://zgadzaj.com/development/docker/docker-compose/containers/rabbitmq
   rabbitmq:
@@ -55,6 +56,8 @@ services:
     environment:
       SA_PASSWORD: "P@ssW0rd!"
       ACCEPT_EULA: "Y"
+    ports:
+      - 1435:1433 # exposed just for debugging purposes
 
   clinicmanagement-api:
     build:
